@@ -4,8 +4,8 @@ function Slider(slider) {
   }
 
   // create some variables for working with slider
+  let prev;
   let current;
-  let previous;
   let next;
 
   // select the elements needed for the slider
@@ -13,10 +13,50 @@ function Slider(slider) {
   const prevButton = slider.querySelector(".goToPrev");
   const nextButton = slider.querySelector(".goToNext");
 
+  function startSlider() {
+    current = slider.querySelector('.current') || slides.firstElementChild;
+    prev = current.previousElementSibling || slides.lastElementChild;
+    next = current.nextElementSibling || slides.firstElementChild;
+    console.log(current);
+    console.log(prev);
+    console.log(next);
+  }
+
+  function applyClasses() {
+    current.classList.add('current');
+    prev.classList.add('prev');
+    next.classList.add('next');
+  }
+
+  function move(direction) {
+    // first strip all classes from the current slides
+    const classesToRemove = ['prev', 'current', 'next'];
+    // [prev, current, next].forEach(el => el.classList.remove(...classesToRemove));
+    prev.classList.remove(...classesToRemove);
+    current.classList.remove(...classesToRemove);
+    next.classList.remove(...classesToRemove);
+
+    console.log(direction);
+
+    if(direction === 'back') {
+      // make a new array of the new values, and destructure them over and into the prev, current and next variables
+      [prev, current, next] = [prev.previousElementSibling || slides.lastElementChild, prev, current];
+    } else {
+      [prev, current, next] = [current, next, next.nextElementSibling || slides.firstElementChild];
+
+    }
+    applyClasses();
+  }
 
 
+  // When this slider is created, run the startSlider function
+  startSlider();
+  applyClasses();
 
-  
+  // event listeners
+  prevButton.addEventListener('click', () => move('back'));
+  nextButton.addEventListener('click', () => move('forward'));
+
 }
 
 const mySlider = Slider(document.querySelector(".slider"));
