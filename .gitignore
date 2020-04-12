@@ -1,3 +1,6 @@
 node_modules/
+.cache/
+.vscode/
+dist/
 src/index-FINISHED.js
 src/index-prototype-FINISHED.js
