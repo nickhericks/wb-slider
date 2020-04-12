@@ -13,6 +13,7 @@ function Slider(slider) {
   const prevButton = slider.querySelector(".goToPrev");
   const nextButton = slider.querySelector(".goToNext");
 
+  
   function startSlider() {
     current = slider.querySelector('.current') || slides.firstElementChild;
     prev = current.previousElementSibling || slides.lastElementChild;
@@ -22,11 +23,13 @@ function Slider(slider) {
     console.log(next);
   }
 
+
   function applyClasses() {
     current.classList.add('current');
     prev.classList.add('prev');
     next.classList.add('next');
   }
+
 
   function move(direction) {
     // first strip all classes from the current slides
@@ -36,14 +39,20 @@ function Slider(slider) {
     current.classList.remove(...classesToRemove);
     next.classList.remove(...classesToRemove);
 
-    console.log(direction);
-
     if(direction === 'back') {
       // make a new array of the new values, and destructure them over and into the prev, current and next variables
-      [prev, current, next] = [prev.previousElementSibling || slides.lastElementChild, prev, current];
+      [prev, current, next] = [
+        // get the prev slide, if there is none, get the last slide from the entire slider for wrapping
+        prev.previousElementSibling || slides.lastElementChild,
+        prev,
+        current,
+      ];
     } else {
-      [prev, current, next] = [current, next, next.nextElementSibling || slides.firstElementChild];
-
+      [prev, current, next] = [
+        current,
+        next,
+        next.nextElementSibling || slides.firstElementChild,
+      ];
     }
     applyClasses();
   }
@@ -53,11 +62,13 @@ function Slider(slider) {
   startSlider();
   applyClasses();
 
-  // event listeners
-  prevButton.addEventListener('click', () => move('back'));
-  nextButton.addEventListener('click', () => move('forward'));
 
+  // event listeners
+  // If you need to pass an argument to a function, then you need to run an arrow function, if you don't need to pass an argument then you can just pass a reference to the function
+  prevButton.addEventListener('click', () => move('back'));
+  nextButton.addEventListener('click', move);
 }
+
 
 const mySlider = Slider(document.querySelector(".slider"));
 const dogSlider = Slider(document.querySelector(".dog-slider"));
